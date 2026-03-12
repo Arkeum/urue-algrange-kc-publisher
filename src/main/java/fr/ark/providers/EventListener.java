@@ -1,6 +1,7 @@
 package fr.ark.providers;
 
 import fr.ark.dispatchers.EventDispatcher;
+import fr.ark.exceptions.GlobalExceptionHandler;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
@@ -14,12 +15,14 @@ public class EventListener implements EventListenerProvider {
 
     @Override
     public void onEvent(Event event) {
-        eventDispatcher.dispatch(event);
+        eventDispatcher.dispatch(event)
+                .onFailure(GlobalExceptionHandler::handle);
     }
 
     @Override
     public void onEvent(AdminEvent adminEvent, boolean b) {
-        eventDispatcher.dispatch(adminEvent, b);
+        eventDispatcher.dispatch(adminEvent, b)
+                .onFailure(GlobalExceptionHandler::handle);
     }
 
     @Override

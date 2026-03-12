@@ -1,6 +1,8 @@
 package fr.ark.dispatchers;
 
+import fr.ark.exceptions.UnsuportedEventException;
 import fr.ark.services.UserEventService;
+import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.admin.AdminEvent;
@@ -9,20 +11,16 @@ import org.keycloak.events.admin.AdminEvent;
 public class EventDispatcher {
     private final UserEventService userEventService;
 
-    public void dispatch(Event event) {
-        switch(event.getType()){
-            case REGISTER:
-                break;
-            case UPDATE_PROFILE:
-                break;
-            case UPDATE_EMAIL:
-                break;
-            default:
-                break;
-        }
+    public Try<Void> dispatch(Event event) {
+        return switch (event.getType()) {
+            case REGISTER -> userEventService.userRegistration(event);
+            case UPDATE_PROFILE -> userEventService.userProfileUpdate(event);
+            case UPDATE_EMAIL -> userEventService.userEmailUpdate(event);
+            default -> throw new UnsuportedEventException("Unsupported event type: " + event.getType());
+        };
     }
 
-    public void dispatch(AdminEvent event, boolean b) {
-
+    public Try<Void> dispatch(AdminEvent event, boolean b) {
+        throw new UnsupportedOperationException("Admin event not supported yet.");
     }
 }
