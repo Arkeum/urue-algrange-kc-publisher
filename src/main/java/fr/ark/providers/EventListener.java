@@ -1,0 +1,29 @@
+package fr.ark.providers;
+
+import fr.ark.dispatchers.EventDispatcher;
+import lombok.AllArgsConstructor;
+import org.keycloak.events.Event;
+import org.keycloak.events.EventListenerProvider;
+import org.keycloak.events.admin.AdminEvent;
+import org.keycloak.models.KeycloakSession;
+
+@AllArgsConstructor
+public class EventListener implements EventListenerProvider {
+    private final KeycloakSession keycloakSession;
+    private final EventDispatcher eventDispatcher;
+
+    @Override
+    public void onEvent(Event event) {
+        eventDispatcher.dispatch(event);
+    }
+
+    @Override
+    public void onEvent(AdminEvent adminEvent, boolean b) {
+        eventDispatcher.dispatch(adminEvent, b);
+    }
+
+    @Override
+    public void close() {
+
+    }
+}
