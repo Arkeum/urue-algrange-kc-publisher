@@ -16,11 +16,11 @@ public class EventDispatcher {
             case REGISTER -> userEventService.userRegistration(event);
             case UPDATE_PROFILE -> userEventService.userProfileUpdate(event);
             case UPDATE_EMAIL -> userEventService.userEmailUpdate(event);
-            default -> throw new UnsuportedEventException("Unsupported event type: " + event.getType());
+            default -> Try.failure(new UnsuportedEventException("Unsupported event type: " + event.getType()));
         };
     }
 
     public Try<Void> dispatch(AdminEvent event, boolean b) {
-        throw new UnsupportedOperationException("Admin event not supported yet.");
+        return Try.failure(new UnsupportedOperationException("Admin event not supported yet."));
     }
 }

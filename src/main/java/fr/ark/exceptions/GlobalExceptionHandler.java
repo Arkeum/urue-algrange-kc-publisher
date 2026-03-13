@@ -7,7 +7,7 @@ public class GlobalExceptionHandler {
     public static void handle(Throwable t){
         switch (t){
             case Error e -> throw e;
-            case UnsuportedEventException exception -> unsuportedEvent((UnsuportedEventException) t);
+            case UnsuportedEventException exception -> unsuportedEvent(exception);
             default -> defaultException((Exception) t);
         }
 

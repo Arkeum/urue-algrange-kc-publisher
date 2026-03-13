@@ -2,6 +2,7 @@ openapi: 3.1.0
 paths:
   /api/users:
     patch:
+      operationId: updateUser
       requestBody:
         content:
           application/json:
@@ -19,6 +20,7 @@ paths:
       tags:
         - User Controller
     get:
+      operationId: getAllUsers
       responses:
         "200":
           description: OK
@@ -32,6 +34,7 @@ paths:
       tags:
         - User Controller
     post:
+      operationId: addUser
       requestBody:
         content:
           application/json:
@@ -52,6 +55,7 @@ paths:
         - User Controller
   /api/users/{userId}:
     get:
+      operationId: getUserById
       parameters:
         - name: userId
           in: path
@@ -70,6 +74,46 @@ paths:
         - User Controller
 components:
   schemas:
+    NestedRoleDto_Detailed:
+      type: object
+      properties:
+        roleId:
+          $ref: "#/components/schemas/UUID"
+        name:
+          type: string
+        roleType:
+          type: string
+    NestedGroupDto_Detailed:
+      type: object
+      properties:
+        groupId:
+          $ref: "#/components/schemas/UUID"
+        name:
+          type: string
+        sector:
+          $ref: "#/components/schemas/NestedSectorDto_Detailed"
+    NestedSectorDto_Detailed:
+      type: object
+      properties:
+        sectorId:
+          $ref: "#/components/schemas/UUID"
+        name:
+          type: string
+    UserDto_Basic:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
     UserDto_Creation:
       type: object
       required:
@@ -152,6 +196,10 @@ components:
         lastName:
           type: string
           pattern: \S
+    UUID:
+      type: string
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
   securitySchemes:
     SecurityScheme:
       type: openIdConnect

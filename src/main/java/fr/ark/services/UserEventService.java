@@ -5,12 +5,13 @@ import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;
 
-@AllArgsConstructor
 public class UserEventService {
 
     public Try<Void> userRegistration(Event event){
         Log.info("User registration event received");
         Log.debugf("User registration event details: %s", event.toString());
+
+
         return Try.of(() -> null);
     }
 
