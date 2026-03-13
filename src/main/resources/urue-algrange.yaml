@@ -1,0 +1,162 @@
+openapi: 3.1.0
+paths:
+  /api/users:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto_Update"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto_UpdateResponse"
+      summary: Update User
+      tags:
+        - User Controller
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDto_Basic"
+      summary: Get All Users
+      tags:
+        - User Controller
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto_Creation"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto_CreationResponse"
+        "400":
+          description: Bad Request
+      summary: Add User
+      tags:
+        - User Controller
+  /api/users/{userId}:
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto_Detailed"
+      summary: Get User By Id
+      tags:
+        - User Controller
+components:
+  schemas:
+    UserDto_Creation:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
+    UserDto_CreationResponse:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
+    UserDto_Detailed:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
+        roles:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/NestedRoleDto_Detailed"
+        group:
+          $ref: "#/components/schemas/NestedGroupDto_Detailed"
+    UserDto_Update:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
+    UserDto_UpdateResponse:
+      type: object
+      required:
+        - userId
+        - firstName
+        - lastName
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        firstName:
+          type: string
+          pattern: \S
+        lastName:
+          type: string
+          pattern: \S
+  securitySchemes:
+    SecurityScheme:
+      type: openIdConnect
+      openIdConnectUrl: http://192.168.1.67:8080/realms/UneRoseUnEspoir-dev/.well-known/openid-configuration
+      description: Authentication
+info:
+  title: urue-algrange API
+  version: 1.0.0-SNAPSHOT
