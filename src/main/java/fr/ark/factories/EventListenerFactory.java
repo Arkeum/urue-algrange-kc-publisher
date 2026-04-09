@@ -3,6 +3,9 @@ package fr.ark.factories;
 import fr.ark.dispatchers.EventDispatcher;
 import fr.ark.listeners.EventListener;
 import fr.ark.services.UserEventService;
+import fr.ark.urueAlgrange.ApiClient;
+import fr.ark.urueAlgrange.apis.UserApi;
+import fr.ark.utilities.ConfigLoader;
 import lombok.AllArgsConstructor;
 import org.keycloak.Config;
 import org.keycloak.events.EventListenerProvider;
@@ -11,6 +14,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 
 public class EventListenerFactory implements EventListenerProviderFactory {
+    private ConfigLoader config;
     private EventDispatcher eventDispatcher;
 
     @Override
@@ -21,7 +25,12 @@ public class EventListenerFactory implements EventListenerProviderFactory {
 
     @Override
     public void init(Config.Scope scope) {
-        UserEventService userEventService = new UserEventService();
+        this.config = new ConfigLoader("config.properties");
+        ApiClient apiClient = new ApiClient().setBasePath(
+                config.get("urue.algrange.api.baseurl")
+        );
+        UserApi userApi = new UserApi(apiClient);
+        UserEventService userEventService = new UserEventService(userApi);
         this.eventDispatcher = new EventDispatcher(userEventService);
     }
 

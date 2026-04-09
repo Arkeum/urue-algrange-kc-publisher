@@ -2,6 +2,7 @@ package fr.ark.dispatchers;
 
 import fr.ark.exceptions.UnsuportedEventException;
 import fr.ark.services.UserEventService;
+import fr.ark.urueAlgrange.ApiClient;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;

@@ -2,6 +2,7 @@ package fr.ark.listeners;
 
 import fr.ark.dispatchers.EventDispatcher;
 import fr.ark.exceptions.GlobalExceptionHandler;
+import fr.ark.urueAlgrange.ApiClient;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;

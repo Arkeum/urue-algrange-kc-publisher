@@ -18,7 +18,7 @@ paths:
                 $ref: "#/components/schemas/UserDto_UpdateResponse"
       summary: Update User
       tags:
-        - User Controller
+        - User
     get:
       operationId: getAllUsers
       responses:
@@ -32,7 +32,7 @@ paths:
                   $ref: "#/components/schemas/UserDto_Basic"
       summary: Get All Users
       tags:
-        - User Controller
+        - User
     post:
       operationId: addUser
       requestBody:
@@ -52,7 +52,7 @@ paths:
           description: Bad Request
       summary: Add User
       tags:
-        - User Controller
+        - User
   /api/users/{userId}:
     get:
       operationId: getUserById
@@ -71,7 +71,7 @@ paths:
                 $ref: "#/components/schemas/UserDto_Detailed"
       summary: Get User By Id
       tags:
-        - User Controller
+        - User
 components:
   schemas:
     NestedRoleDto_Detailed:
@@ -146,6 +146,8 @@ components:
           pattern: \S
     UserDto_Detailed:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/UserDto_Basic"
       required:
         - userId
         - firstName
