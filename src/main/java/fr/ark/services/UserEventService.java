@@ -3,10 +3,7 @@ package fr.ark.services;
 import fr.ark.exceptions.GlobalExceptionHandler;
 import fr.ark.urueAlgrange.ApiClient;
 import fr.ark.urueAlgrange.apis.UserApi;
-import fr.ark.urueAlgrange.dtos.UserDtoBasic;
-import fr.ark.urueAlgrange.dtos.UserDtoCreation;
-import fr.ark.urueAlgrange.dtos.UserDtoCreationResponse;
-import fr.ark.urueAlgrange.dtos.UserDtoDetailed;
+import fr.ark.urueAlgrange.dtos.*;
 import io.quarkus.logging.Log;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
@@ -43,13 +40,11 @@ public class UserEventService {
         Log.info("User profile update event received");
         Log.debugf("User profile update event details: %s", event.toString());
 
-        //UserDtoDetailed userDto = Try.of(() -> api.getUserById(UUID.fromString(event.getUserId())))
-        //        .onFailure(GlobalExceptionHandler::handle)
-        //        .get();
+        UserDtoUpdate userDto = new UserDtoUpdate();
+        userDto.userId(UUID.fromString(event.getUserId()))
+                .firstName("")
+                .lastName("");
 
-        //userDto.firstName(event.g());
-        //userDto.lastName("");
-
-        return Try.of(() -> null);//Try.run(() -> api.updateUser(userDto));
+        return Try.run(() -> api.updateUser(userDto)).onFailure(GlobalExceptionHandler::handle);
     }
 }
