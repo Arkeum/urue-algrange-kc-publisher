@@ -43,15 +43,15 @@ public class RabbitConnectorImpl implements RabbitConnector{
 
     }
 
-    public void openExchange(Channel channel) throws IOException, TimeoutException {
+    public void openExchange(Channel channel) throws IOException {
         channel.exchangeDeclare(exchange, "direct", true);
     }
 
-    public String initQueue(Channel channel,String queue) throws IOException, TimeoutException {
+    public String initQueue(Channel channel,String queue) throws IOException {
         return channel.queueDeclare(queue,true,false,false,null).getQueue();
     }
 
-    public void bindQueue(Channel channel, String queueName, String routingKey) throws IOException, TimeoutException {
+    public void bindQueue(Channel channel, String queueName, String routingKey) throws IOException {
         channel.queueBind(queueName, exchange, routingKey);
     }
 }

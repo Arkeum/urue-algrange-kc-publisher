@@ -1,10 +1,13 @@
-package fr.ark.rabbitmq.publishers;
+package fr.ark.rabbitmq;
 
 import com.rabbitmq.client.Channel;
-import fr.ark.rabbitmq.RabbitConnector;
+import fr.ark.models.User;
 import org.keycloak.events.Event;
 
-public class RabbitUserPublisher {
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+public class RabbitPublisher {
     private final String userDeletionRoute;
     private final String userUpdateRoute;
     private final String userCreationRoute;
@@ -13,7 +16,7 @@ public class RabbitUserPublisher {
 
     private Channel channel;
 
-    public RabbitUserPublisher(
+    public RabbitPublisher(
             RabbitConnector rabbitConnector,
             String exchange,
             String userCreationRoute,
@@ -28,23 +31,16 @@ public class RabbitUserPublisher {
         startup();
     }
 
-    void startup() throws Exception {
+    void startup() throws IOException, TimeoutException {
         //todo: rendre ce morceau resilient
         this.channel = rabbitConnector.openChannel();
         rabbitConnector.openExchange(channel);
 
     }
 
-    public void publishUserCreationMessage(Event event) throws Exception {
-        channel.basicPublish(exchange, userCreationRoute, null, "".getBytes());
-    }
-
-    public void publishUserUpdateMessage(Event event) throws Exception {
-        channel.basicPublish(exchange, userUpdateRoute, null,"".getBytes());
-    }
-
-    public void publishUserDeletionMessage(Event event) throws Exception {
-        channel.basicPublish(exchange, userDeletionRoute, null, "".getBytes());
+    public void publishUserUpdateMessage(Event event) throws IOException {
+        String message = new User(event).toJson();
+        channel.basicPublish(exchange, userUpdateRoute, null,message.getBytes());
     }
 
 }

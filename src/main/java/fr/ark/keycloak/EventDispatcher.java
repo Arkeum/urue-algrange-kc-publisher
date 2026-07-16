@@ -1,19 +1,19 @@
 package fr.ark.keycloak;
 
 import fr.ark.exceptions.UnsupportedEventException;
-import fr.ark.rabbitmq.publishers.RabbitUserPublisher;
+import fr.ark.rabbitmq.RabbitPublisher;
 import lombok.AllArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.admin.AdminEvent;
 
 @AllArgsConstructor
 public class EventDispatcher {
-    private final RabbitUserPublisher rabbitUserPublisher;
+    private final RabbitPublisher rabbitPublisher;
 
     public void dispatch(Event event) throws Exception{
         switch (event.getType()) {
-            case REGISTER -> rabbitUserPublisher.publishUserCreationMessage(event);
-            case UPDATE_PROFILE, UPDATE_EMAIL -> rabbitUserPublisher.publishUserUpdateMessage(event);
+            //case REGISTER -> rabbitPublisher.publishUserCreationMessage(event);
+            case UPDATE_PROFILE -> rabbitPublisher.publishUserUpdateMessage(event);
             default -> throw new UnsupportedEventException("Unsupported event type: " + event.getType());
         };
     }

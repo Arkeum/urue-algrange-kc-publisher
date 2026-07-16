@@ -1,8 +1,9 @@
 package fr.ark.keycloak;
 
+import fr.ark.exceptions.GlobalExceptionHandler;
 import fr.ark.rabbitmq.RabbitConnector;
 import fr.ark.rabbitmq.RabbitConnectorImpl;
-import fr.ark.rabbitmq.publishers.RabbitUserPublisher;
+import fr.ark.rabbitmq.RabbitPublisher;
 import fr.ark.utilities.ConfigLoader;
 import org.keycloak.Config;
 import org.keycloak.events.EventListenerProvider;
@@ -13,7 +14,7 @@ import org.keycloak.models.KeycloakSessionFactory;
 public class EventListenerFactory implements EventListenerProviderFactory {
     private ConfigLoader config;
     private EventDispatcher eventDispatcher;
-    private RabbitUserPublisher rabbitUserPublisher;
+    private RabbitPublisher rabbitPublisher;
 
     @Override
     public EventListenerProvider create(KeycloakSession keycloakSession) {
@@ -26,9 +27,10 @@ public class EventListenerFactory implements EventListenerProviderFactory {
         this.config = new ConfigLoader("config.properties");
         try {
             initQueueConnection();
-            eventDispatcher = new EventDispatcher(rabbitUserPublisher);
+            eventDispatcher = new EventDispatcher(rabbitPublisher);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize provider components", e);
+            GlobalExceptionHandler.handle(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -42,7 +44,7 @@ public class EventListenerFactory implements EventListenerProviderFactory {
                 config.get("rabbitmq.exchange")
         );
 
-        rabbitUserPublisher = new RabbitUserPublisher(
+        rabbitPublisher = new RabbitPublisher(
                 rabbitConnector,
                 config.get("rabbitmq.exchange"),
                 config.get("rabbitmq.routing.user-created"),
