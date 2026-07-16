@@ -43,4 +43,9 @@ public class RabbitPublisher {
         channel.basicPublish(exchange, userUpdateRoute, null,message.getBytes());
     }
 
+    public void publishUserCreationMessage(Event event) throws IOException {
+        String message = new User(event).toJson();
+        channel.basicPublish(exchange, userCreationRoute, null,message.getBytes());
+    }
+
 }

@@ -12,7 +12,7 @@ public class EventDispatcher {
 
     public void dispatch(Event event) throws Exception{
         switch (event.getType()) {
-            //case REGISTER -> rabbitPublisher.publishUserCreationMessage(event);
+            case REGISTER -> rabbitPublisher.publishUserCreationMessage(event);
             case UPDATE_PROFILE -> rabbitPublisher.publishUserUpdateMessage(event);
             default -> throw new UnsupportedEventException("Unsupported event type: " + event.getType());
         };

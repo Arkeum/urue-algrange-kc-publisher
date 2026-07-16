@@ -14,17 +14,17 @@ import java.util.UUID;
 
 public class User {
     @JsonIgnore
-    private static ObjectWriter objectWriter = new ObjectMapper()
+    private static final ObjectWriter objectWriter = new ObjectMapper()
             .writer()
             .withDefaultPrettyPrinter();
 
-    UUID userId;
+    public String userId;
 
     @JsonAnyGetter
-    Map<String, String> attributes;
+    public Map<String, String> attributes;
 
     public User(Event event) {
-        this.userId = UUID.fromString(event.getUserId());
+        this.userId = event.getUserId();
         this.attributes = event.getDetails();
     }
 
